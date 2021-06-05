@@ -4,8 +4,7 @@
 -- AFBV - alta frequência e baixo valor
 -- AFAV - alta frequência e alto valor
 -- SP - super produtivo
-DROP TABLE if EXISTS tb_seller_sgmt;
-CREATE TABLE tb_seller_sgmt AS
+
     SELECT
         T5.*,
         CASE
@@ -22,7 +21,7 @@ CREATE TABLE tb_seller_sgmt AS
             ELSE "ativo"
         END AS segto_vida,
 
-        '2018-06-01' AS dt_sgmt
+        '{date_end}' AS dt_sgmt
 
     FROM (
         SELECT
@@ -36,9 +35,9 @@ CREATE TABLE tb_seller_sgmt AS
                 COUNT(DISTINCT T1.order_id) AS qtde_pedidos,
                 COUNT(t2.product_id) AS qtde_prods,
                 COUNT(DISTINCT t2.product_id) AS qtde_prods_dist,
-                CAST((JulianDay('2018-06-01') - JulianDay(T1.order_approved_at)) As Integer) AS qtde_dias_ult_vda,
+                CAST((JulianDay('{date_end}') - JulianDay(T1.order_approved_at)) As Integer) AS qtde_dias_ult_vda,
                 MAX(T1.order_approved_at) AS dt_ult_vda,
-                CAST((JulianDay('2018-06-01') - JulianDay(dt_ini)) As Integer) AS qtde_dias_base
+                CAST((JulianDay('{date_end}') - JulianDay(dt_ini)) As Integer) AS qtde_dias_base
             FROM tb_orders AS T1
             LEFT JOIN tb_order_items AS T2
             ON T1.order_id = T2.order_id
@@ -52,9 +51,9 @@ CREATE TABLE tb_seller_sgmt AS
             GROUP BY T2.seller_id
         ) AS T3
     ON T2.seller_id = T3.seller_id
-    WHERE T1.order_approved_at BETWEEN '2017-06-01' AND '2018-06-01'
+    WHERE T1.order_approved_at BETWEEN '{date_init}' AND '{date_end}'
     GROUP BY T2.seller_id
     ) AS T4
     ) AS T5
 WHERE seller_id IS NOT NULL
-;
+

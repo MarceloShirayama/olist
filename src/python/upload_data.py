@@ -8,15 +8,14 @@ BASE_DIR = os.path.dirname(
 )
 DATA_DIR = os.path.join(BASE_DIR, 'data')
 
-# configurações do banco de dados sqlite
-db_name = os.path.join(DATA_DIR, 'olist')
-str_connection = f'sqlite:///{db_name}.db'
-
 # lista de arquivos no diretório data
 list_files_data = os.listdir(DATA_DIR)
 # apenas os arquivos .csv
 files_csv = [file for file in list_files_data if file.endswith('.csv')]
 
+# configurações do banco de dados sqlite
+db_name = os.path.join(DATA_DIR, 'olist')
+str_connection = f'sqlite:///{db_name}.db'
 # abrir conexão com o banco de dados sqlite
 connection = sqlalchemy.create_engine(str_connection)
 
