@@ -14,7 +14,7 @@ list_files_data = os.listdir(DATA_DIR)
 files_csv = [file for file in list_files_data if file.endswith('.csv')]
 
 # conexão com o banco de dados
-connection = utils.connect_db('sqlite', DATA_DIR)
+connection = utils.connect_db(db_dir=DATA_DIR)
 
 # importar cada arquivo csv para uma tabela do banco de dados
 for file in files_csv:
