@@ -1,9 +1,7 @@
 import os
-import pandas as pd
-import sqlalchemy
 import argparse
 from sqlalchemy.exc import SQLAlchemyError
-from datetime import datetime, timedelta
+import utils
 
 # diretórios do projeto
 BASE_DIR = os.path.dirname(
@@ -13,8 +11,7 @@ DATA_DIR = os.path.join(BASE_DIR, 'data')
 SQL_DIR = os.path.join(BASE_DIR, 'src', 'sql')
 
 # importa a query sql
-with open(os.path.join(SQL_DIR, 'segmentos.sql')) as query_file:
-    sql_query = query_file.read()
+sql_query = utils.import_query(os.path.join(SQL_DIR, 'segmentos.sql'))
 
 # insere as datas de início e fim do período de consulta da query sql
 parser = argparse.ArgumentParser()
@@ -29,11 +26,8 @@ sql_query = sql_query.format(
     date_init=date_init, date_end=date_end
 )
 
-# configurações do banco de dados sqlite
-db_name = os.path.join(DATA_DIR, 'olist')
-str_connection = f'sqlite:///{db_name}.db'
-# abrir conexão com o banco de dados sqlite
-connection = sqlalchemy.create_engine(str_connection)
+# # abrir conexão com o banco de dados sqlite
+conn = utils.connect_db()
 
 create_sql_query = f'''CREATE TABLE tb_seller_sgmt AS {sql_query};'''
 
@@ -42,13 +36,13 @@ insert_sql_query = f'''
     INSERT INTO tb_seller_sgmt {sql_query};
 '''
 
+# excecução da query
 try:
     print('Criando tabela...')
-    connection.execute(create_sql_query)
+    utils.execute_many_sql_query(create_sql_query, conn)
     print('tabela criada com sucesso!')
-except SQLAlchemyError as err:
-    print(err._message)
+except SQLAlchemyError:
+    # print(err._message)
     print(f'Inserindo dados de segmentação de {date_init} a {date_end}...')
-    for q in insert_sql_query.split(';')[:-1]:
-        connection.execute(q)
+    utils.execute_many_sql_query(insert_sql_query, conn, verbose=True)
     print('Dados inseridos com sucesso!')

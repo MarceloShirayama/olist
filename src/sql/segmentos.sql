@@ -23,7 +23,7 @@ SELECT t5.*,
        CASE
            WHEN qtde_dias_base <= 60
            THEN "inicio"
-           WHEN qtde_dias_base >= 300
+           WHEN qtde_dias_ult_vda >= 300
            THEN "retencao"
            ELSE "ativo"
        END AS segto_vida,

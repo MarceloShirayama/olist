@@ -22,6 +22,7 @@ connection = sqlalchemy.create_engine(str_connection)
 # importar cada arquivo csv para uma tabela do banco de dados
 for file in files_csv:
     df = pd.read_csv(os.path.join(DATA_DIR, file))
-    table_name = 'tb_' + file.replace('olist_', '').replace('_dataset', '').replace('.csv', '')
+    table_name = 'tb_' + \
+        file.replace('olist_', '').replace('_dataset', '').replace('.csv', '')
     df.to_sql(table_name, connection, if_exists='replace', index=False)
     print(f'criando tabela: {table_name}')
