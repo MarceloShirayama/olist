@@ -4,19 +4,18 @@ from sqlalchemy.exc import SQLAlchemyError
 import utils
 
 # diretórios do projeto
-BASE_DIR = os.path.dirname(
-    os.path.dirname(os.path.dirname((os.path.abspath(__file__))))
-)
-DATA_DIR = os.path.join(BASE_DIR, 'data')
-SQL_DIR = os.path.join(BASE_DIR, 'src', 'sql')
+DATA_PREP_DIR = os.path.dirname((os.path.abspath(__file__)))
 
 # importa a query sql
-sql_query = utils.import_query(os.path.join(SQL_DIR, 'segmentos.sql'))
+sql_query = utils.import_query(os.path.join(DATA_PREP_DIR, 'segmentos.sql'))
 
 # insere as datas de início e fim do período de consulta da query sql
 parser = argparse.ArgumentParser()
-# parser.add_argument('--date_init', '-i', help='Data de início da extração', default='')
-parser.add_argument('--date_end', '-e', help='Data de fim da extração', default='2018-06-01')
+parser.add_argument(
+    '--date_end', '-e',
+    help='Data de fim da extração',
+    default='2018-06-01'
+)
 args = parser.parse_args()
 date_end = args.date_end
 year = int(date_end.split('-')[0]) - 1

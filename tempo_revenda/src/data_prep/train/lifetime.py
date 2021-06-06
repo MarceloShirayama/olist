@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-import utils
+from olistlib.db import utils
 
 # diretórios do projeto
 BASE_DIR = os.path.dirname(

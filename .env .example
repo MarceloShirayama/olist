@@ -1,0 +1,5 @@
+DATABASE_NAME=olist
+DB_USER=olist
+DB_PASSWORD=olist
+DB_HOST=localhost
+DB_PORT=5432
