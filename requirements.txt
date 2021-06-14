@@ -4,3 +4,4 @@ dateutils
 python-dotenv
 flake8
 scikit-learn
+tqdm

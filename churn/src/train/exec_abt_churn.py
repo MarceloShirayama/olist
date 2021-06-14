@@ -4,11 +4,14 @@ from olistlib.db import utils
 from sklearn import tree, metrics
 
 # diretórios do projeto
-DATA_CHURN = os.path.dirname((os.path.abspath(__file__)))
-BASE_DIR = os.path.dirname(DATA_CHURN)
-DATA_DIR = os.path.join(BASE_DIR, 'upload_data', 'data')
+TRAIN_DIR = os.path.dirname((os.path.abspath(__file__)))
+SRC_DIR = os.path.dirname(TRAIN_DIR)
+CHURN_DIR = os.path.dirname(SRC_DIR)
+PROJ_DIR = os.path.dirname(CHURN_DIR)
+DATA_DIR = os.path.join(PROJ_DIR, 'upload_data', 'data')
+print(DATA_DIR)
 
-query_path = './churn/query_abt_churn.sql'
+query_path = os.path.join(TRAIN_DIR, 'make_abt.sql')
 
 query = utils.import_query(query_path)
 
@@ -39,7 +42,6 @@ avg_churn = abt['flag_churn'].mean()
 target = 'flag_churn'
 
 features = abt.columns[3:-2]
-features.remove(['seller_id', 'dt_ult_vda'])
 
 clf = tree.DecisionTreeClassifier(max_depth=10)
 
@@ -49,7 +51,16 @@ y_pred = clf.predict(abt[features])
 y_prob = clf.predict_proba(abt[features])
 
 acc = metrics.accuracy_score(abt[target], y_pred)
-auc = metrics.roc_auc_score(abt[target], y_prob[:,1])
+auc = metrics.roc_auc_score(abt[target], y_prob[:, 1])
 
 features_importance = pd.Series(clf.feature_importances_, index=features)
-features_importance.sort_values(inplace=True)
+features_importance.sort_values(ascending=False)
+
+print('*' * 40)
+print('Acurácia: ', acc)
+print('*' * 40)
+print('ROC: ', auc)
+print('*' * 40)
+print('features_importance:')
+print(features_importance)
+print('*' * 40)

@@ -37,7 +37,7 @@ def connect_db(db_manager='sqlite', db_dir=None):
         pwd = os.getenv('DB_PASSWORD')
         host = os.getenv('DB_HOST')
         port = os.getenv('DB_PORT')
-        str_connection = f'postgres://{user}:{pwd}@{host}:{port}/{db_name}'
+        str_connection = f'postgresql://{user}:{pwd}@{host}:{port}/{db_name}'
         return sqlalchemy.create_engine(str_connection)
 
     else:
